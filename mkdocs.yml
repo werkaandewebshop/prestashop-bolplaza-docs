@@ -1,0 +1,17 @@
+site_name: Prestashop Bol.com Plaza API
+site_description: Verbind Prestashop met uw Bol.com Plaza API account
+theme: readthedocs
+strict: true
+
+pages:
+  - Home: index.md
+  - Configuratie:
+    - 'Bol.com': configuratie/bol.com.md
+    - 'Module': configuratie/module.md
+    - 'Auto import': configuratie/cron.md
+  - Tests:
+    - 'Orders': test/orders.md
+    - 'Producten': test/producten.md
+  - Gebruik:
+    - 'Orders': gebruik/orders.md
+    - 'Producten': gebruik/producten.md
