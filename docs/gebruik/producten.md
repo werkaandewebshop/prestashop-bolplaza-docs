@@ -24,11 +24,11 @@ Als er in het productenoverzicht een andere status dan `OK` staat, kan via de kn
 
 ## Veelgestelde vragen
 
-### Hoe zet ik een afbeelding bij een product?**
+### Hoe zet ik een afbeelding bij een product?
 
 Helaas is deze functie nog niet beschikbaar via de Plaza API van Bol.com. U kunt alleen nieuwe producten toevoegen via de Bol.com interface. Daar kunt u ook uw productinformatie beheren (zoals afbeeldingen).
 
-### Moet ik alle producten handmatig langslopen?**
+### Moet ik alle producten handmatig langslopen?
 
 Indien u toegang hebt tot de database kunt u de producten ook direct in de tabel toevoegen. U dient daarna nog wel de synchronisatie handmatig aan te zetten. Hieronder staat een (voorbeeld) van een SQL query om de producten te selecteren. In deze situatie is er een Database Prefix van `ps_` gebruikt en een shop ID van `1`, deze gegevens moet wellicht voor uw situatie aangepast worden.
 
@@ -38,21 +38,24 @@ Verwijder eerst alle huidige Bol.com producten uit de tabel
 
 Voeg de bestaande producten toe (met een dezelfde prijs)
 
-        INSERT INTO ps_bolplaza_product
-          (id_product, id_product_attribute, id_shop, published, price, status)
-        SELECT p.id_product, IFNULL(a.id_product_attribute, 0) as id_product_attribute, s.id_shop, 1 as published, 0 as price, 1 as status
-        FROM ps_product p
-        LEFT JOIN ps_product_shop s ON s.id_product = p.id_product
-        LEFT JOIN ps_product_attribute a ON a.id_product = p.id_product
-        WHERE s.id_shop = 1;
-
+```sql
+INSERT INTO ps_bolplaza_product
+  (id_product, id_product_attribute, id_shop, published, price, status)
+SELECT p.id_product, IFNULL(a.id_product_attribute, 0) as id_product_attribute, s.id_shop, 1 as published, 0 as price, 1 as status
+FROM ps_product p
+LEFT JOIN ps_product_shop s ON s.id_product = p.id_product
+LEFT JOIN ps_product_attribute a ON a.id_product = p.id_product
+WHERE s.id_shop = 1;
+```
 
 **Of** voeg de bestaande producten toe met een verhoogde prijs van € 5.
 
-    INSERT INTO ps_bolplaza_product
-      (id_product, id_product_attribute, id_shop, published, price, status)
-    SELECT p.id_product, IFNULL(a.id_product_attribute, 0) as id_product_attribute, s.id_shop, 1 as published, ROUND(p.price * 1.21, 2) + 5 as price, 1 as status
-    FROM ps_product p
-    LEFT JOIN ps_product_shop s ON s.id_product = p.id_product
-    LEFT JOIN ps_product_attribute a ON a.id_product = p.id_product
-    WHERE s.id_shop = 1;
+```sql
+INSERT INTO ps_bolplaza_product
+  (id_product, id_product_attribute, id_shop, published, price, status)
+SELECT p.id_product, IFNULL(a.id_product_attribute, 0) as id_product_attribute, s.id_shop, 1 as published, ROUND(p.price * 1.21, 2) + 5 as price, 1 as status
+FROM ps_product p
+LEFT JOIN ps_product_shop s ON s.id_product = p.id_product
+LEFT JOIN ps_product_attribute a ON a.id_product = p.id_product
+WHERE s.id_shop = 1;
+```
