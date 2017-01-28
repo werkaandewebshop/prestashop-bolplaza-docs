@@ -18,6 +18,7 @@ Om de testverbinding te configureren kun vul je de volgende waardes in:
 * Bol.com Plaza API prive sleutel: [Uw private Test API sleutel](!Configuratie/Bol.com)
 * Vervoerder: `<uw vervoerder>`
 * Vervoerderscode: `<bol.com vervoerderscode>`
+* Klantgroep: `Klant`
 * Leveringscode `<selecteer een levertijd>`
 * Gebruik gratis verzending: `JA`
 
@@ -58,3 +59,7 @@ Nadat u de testverbinding heeft geconfigureerd en de tests goed heeft uitgevoerd
 * Bol.com Plaza API prive sleutel: [Uw private API sleutel](../configuratie/bol.com.md)
 
 U bent nu klaar om orders te ontvangen. Lees in de gebruikersdocumentatie hoe dit werkt.
+
+
+## Klantgroep
+Het is aan te raden om een speciale klantgroep voor de Bol.com klanten te gebruiken. U kunt bij `Klanten` -> `Groepen` een nieuwe klantgroep aanmaken, in de module configuratie kunt u instellen dat deze klantgroep gebruikt dient te worden. De reden waarom het verstandig is om een aparte klantgroep te gebruiken, is zodat u de bestellingen voor Bol.com via aparte logica kunt laten verwerken. U kunt bijvoorbeeld de Catalogus Prijsregels van Prestashop gebruiken voor alle klantgroepen behalve de Bol.com klantengroep.
