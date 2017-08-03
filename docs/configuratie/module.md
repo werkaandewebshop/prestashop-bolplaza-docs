@@ -18,9 +18,10 @@ Om de testverbinding te configureren kun vul je de volgende waardes in:
 * Bol.com Plaza API prive sleutel: [Uw private Test API sleutel](!Configuratie/Bol.com)
 * Vervoerder: `<uw vervoerder>`
 * Vervoerderscode: `<bol.com vervoerderscode>`
-* Klantgroep: `Klant`
 * Leveringscode `<selecteer een levertijd>`
+* Klantgroep: `Klant`
 * Gebruik gratis verzending: `JA`
+* Huisnummer in adres2: `NEE (Standaard) - Kies JA wanneer u het huisnummer bij de klantprofielen in het adres2 veld wilt zetten.`
 
 De mogelijke vervoerderscodes kunt u vinden op de [Bol.com Plaza API website](https://developers.bol.com/documentatie/plaza-api/appendix-a-transporters/) in de kolom `API transporter code`. Hieronder staat een lijst met (momenteel) mogelijke codes. Let op dat de lijst van Bol.com altijd de meest actuele lijst is. Houdt er ook rekening mee dat de kolom `Available in API v2` op `yes` staat.
 

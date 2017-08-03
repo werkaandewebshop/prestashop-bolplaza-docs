@@ -8,7 +8,25 @@ Binnen Prestashop kunt u nu per product instellen hoe deze op Bol.com weergegeve
 
 ![Bol.com products](../img/overview_producttab.png)
 
-Op deze tab ziet u voor alle productcombinaties een optie om deze te publiceren (via het vinkje onder `Publiceren`). Ook kunt u per combinatie een Bol.com geadverteerde prijs instellen (in het veld `Specifieke prijs`). Klik voor een product aan dat deze op Bol.com gepubliceerd moet worden.
+Op deze tab ziet u voor alle productcombinaties een optie om deze te publiceren (via het vinkje onder `Published`). Ook kunt u per combinatie een Bol.com geadverteerde prijs instellen (in het veld `Price change`). Klik voor een product aan dat deze op Bol.com gepubliceerd moet worden.
+
+Per product zijn de volgende instellingen mogelijk:
+
+- `Published` - Het product moet gepubliceerd worden op Bol.com
+- `Price change` - Berekent de eindprijs aan de hand van een bepaalde opslag
+- `Final price` - Berekent de opslag aan de hand van een bepaalde eindprijs. De opslag wordt opgeslagen in de database.
+
+Nadat u op de regel klikt, kunt u nog meer instellingen doen:
+
+- `Condition` - Hier kunt u de productconditie aangeven (bijvoorbeeld voor 2e hands producten)
+- `EAN` - Hier kunt u een EAN override instellen, normaal gesproken staat de standaard EAN in ingevuld
+- `Custom Delivery time` - Een override voor de levertijd van het specifieke product
+
+Verder ziet u
+- `Proposed price` - Klik op de prijs om deze in te stellen, of klik op `-- Select --` om dit voor alle producten in te stellen.
+- `Base price` - De prijs van het product in uw webshop
+
+![Edit bol.com product](../img/edit_product.png)
 
 ## Producten synchroniseren
 Wanneer er een nieuw product wordt geselecteerd voor Bol.com, wordt deze direct naar Bol.com gemeld. Daarmee komt de status van dat product op `OK`. U kunt de status van de productsynchronisatie inzien op de `Catalogus` -> `Bol.com products` pagina. Indien de melding naar Bol.com mislukt, staat de status nog op `Nieuw`.
@@ -21,6 +39,8 @@ De volgende statussen zijn mogelijk voor een Bol.com publicatie:
 * `Info bijgewerkt` - Van dit product is de informatie bijgewerkt, maar nog niet naar Bol.com gemeld
 
 Als er in het productenoverzicht een andere status dan `OK` staat, kan via de knop `Synchroniseer producten` bovenin de synchronisatie handmatig worden gestart. Indien er foutmeldingen ontstaan tijdens de synchronisatie krijgt u een bericht. Wanneer de API onbeschikbaar is kunt u het later nog eens proberen, maar als er foutieve data gestuurd is, moet u de produten wellicht aanpassen.
+
+U kunt per product selecteren dat deze opnieuw naar Bol.com moet worden gemeld. Dit doet u door op de zijkant van de knop te drukken, daar kunt u de status wijzigen naar een nieuwe status.
 
 ## Veelgestelde vragen
 
@@ -44,8 +64,8 @@ Verwijder eerst alle huidige Bol.com producten uit de tabel
 
 Voeg de bestaande producten (zonder combinaties) toe
 ```sql
-INSERT INTO ps_bolplaza_product (id_product, id_product_attribute, id_shop, published, price, status)
-SELECT p.id_product, 0 as id_product_attribute, s.id_shop, 1 as published, CEIL((((p.price * 1.21) + 5) * 1.20) / 0.1) * 0.1 as price, 1 as status
+INSERT INTO ps_bolplaza_product (id_product, id_product_attribute, id_shop, ean, condition, published, price, status)
+SELECT p.id_product, 0 as id_product_attribute, s.id_shop, p.ean13, 0 as condition, 1 as published, CEIL(((((p.price * 1.21) + 5) * 1.20) - (p.price * 1.21)) / 0.1) * 0.1 as price, 1 as status
 FROM ps_product p
 LEFT JOIN ps_product_shop s on s.id_product = p.id_product
 LEFT JOIN ps_product_attribute a ON a.id_product = p.id_product
@@ -54,8 +74,8 @@ WHERE s.id_shop = 1 AND a.id_product_attribute IS NULL
 
 Voeg de combinaties toe
 ```sql
-INSERT INTO ps_bolplaza_product (id_product, id_product_attribute, id_shop, published, price, status)
-SELECT p.id_product, a.id_product_attribute, s.id_shop, 1 as published, CEIL(((((p.price + a.price) * 1.21) + 5) * 1.20) / 0.1) * 0.1 as price, 1 as status
+INSERT INTO ps_bolplaza_product (id_product, id_product_attribute, id_shop, ean, condition, published, price, status)
+SELECT p.id_product, a.id_product_attribute, s.id_shop, a.ean13, 0 as condition, 1 as published, CEIL((((((p.price + a.price) * 1.21) + 5) * 1.20) - ((p.price + a.price) * 1.21)) / 0.1) * 0.1 as price, 1 as status
 FROM ps_product p
 LEFT JOIN ps_product_shop s on s.id_product = p.id_product
 LEFT JOIN ps_product_attribute a ON a.id_product = p.id_product
